@@ -117,7 +117,6 @@ public class NoticeController {
         }
 
         noticeService.공고수정(id, noticeUpdateReqDto, comPrincipal.getId(), comSkill);
-
         return new ResponseEntity<>(new ResponseDto<>(1, "공고 수정 완료", null), HttpStatus.CREATED);
     }
 
