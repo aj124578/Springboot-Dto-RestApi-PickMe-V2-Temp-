@@ -108,10 +108,6 @@ public class UserController {
         return new ResponseEntity<>(null);
     }
 
-    /*
-     * 23. 3. 5. 안정훈
-     * 추천공고 페이지 호출
-     */
     @GetMapping("/user/userSkillMatchForm")
     public ResponseEntity<?> userSkillMatchForm(Model model,
             @RequestParam(name = "resumeId", defaultValue = "1") int resumeId) {
