@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import shop.mtcoding.pickme.dto.ResponseDto;
 import shop.mtcoding.pickme.dto.notice.NoticeResp.NoticeMainRespDto;
 import shop.mtcoding.pickme.dto.resume.ResumeResp.ResumeSelectRespDto;
+import shop.mtcoding.pickme.dto.user.UserMyPageDto;
 import shop.mtcoding.pickme.dto.user.UserReq.UserJoinReqDto;
 import shop.mtcoding.pickme.dto.user.UserReq.UserLoginReqDto;
 import shop.mtcoding.pickme.dto.user.UserReq.UserMyPageReqDto;
@@ -85,9 +86,7 @@ public class UserController {
                 userJoinReqDto.getUserEmail().isEmpty()) {
             throw new CustomException("userEmail 입력해주세요", HttpStatus.BAD_REQUEST);
         }
-
         userService.회원가입(userJoinReqDto);
-
         return "redirect:/loginForm";
     }
 
@@ -97,7 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/userlogin")
-    public String userlogin(UserLoginReqDto userLoginReqDto) {
+    public ResponseEntity<?> userlogin(UserLoginReqDto userLoginReqDto) {
         if (userLoginReqDto.getUserName() == null || userLoginReqDto.getUserName().isEmpty()) {
             throw new CustomException("userName를 작성해주세요");
         }
@@ -106,7 +105,7 @@ public class UserController {
         }
         User userPrincipal = userService.유저로그인(userLoginReqDto);
         session.setAttribute("userPrincipal", userPrincipal);
-        return "redirect:/";
+        return new ResponseEntity<>(null);
     }
 
     /*
@@ -114,7 +113,7 @@ public class UserController {
      * 추천공고 페이지 호출
      */
     @GetMapping("/user/userSkillMatchForm")
-    public String userSkillMatchForm(Model model,
+    public ResponseEntity<?> userSkillMatchForm(Model model,
             @RequestParam(name = "resumeId", defaultValue = "1") int resumeId) {
         User principal = (User) session.getAttribute("userPrincipal");
         if (principal == null) {
@@ -146,21 +145,23 @@ public class UserController {
 
         model.addAttribute("userSkillMatch", userSkillMatch);
 
-        return "user/userSkillMatchForm";
+        return new ResponseEntity<>(null);
     }
 
     @GetMapping("/")
-    public String main(Model model) {
+    public ResponseEntity<?> main(Model model) {
         List<NoticeMainRespDto> noticeMainList = noticeRepository.findMainList();
         model.addAttribute("noticeMainList", noticeMainList);
-        return "user/main";
+        NoticeMainRespDto dto = new NoticeMainRespDto();
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/user/userList")
-    public String userList(Model model) {
+    public ResponseEntity<?> userList(Model model) {
         List<UserListRespDto> userList = userRepository.findUserList();
         model.addAttribute("userList", userList);
-        return "user/userList";
+        UserListRespDto dto = new UserListRespDto();
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/userJoinForm")
@@ -179,7 +180,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/userMyPage")
-    public String MyPage(@PathVariable int id, Model model, MultipartFile userProfile) {
+    public ResponseEntity<?> MyPage(@PathVariable int id, Model model, MultipartFile userProfile) {
         User principal = (User) session.getAttribute("userPrincipal");
         if (principal == null) {
             throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
@@ -191,12 +192,16 @@ public class UserController {
         if (userPS.getUserName() != principal.getUserName()) {
             throw new CustomException("해당정보를 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
-        model.addAttribute("user", userPS);
         User userProfilePS = userRepository.findById(principal.getId());
-        model.addAttribute("userProfile", userProfilePS);
         List<ResumeSelectRespDto> resumeSelectList = noticeRepository.findAllWithResume();
+        model.addAttribute("user", userPS);
+        model.addAttribute("userProfile", userProfilePS);
         model.addAttribute("resumeSelectList", resumeSelectList);
-        return "user/userMyPage";
+        UserMyPageDto dto = new UserMyPageDto();
+        dto.setResumeSelectList(resumeSelectList);
+        dto.setUserPS(userPS);
+        dto.setUserProfilePS(userProfilePS);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/logout")
