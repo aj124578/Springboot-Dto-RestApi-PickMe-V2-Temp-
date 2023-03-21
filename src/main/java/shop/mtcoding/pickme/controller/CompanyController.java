@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.pickme.dto.ResponseDto;
 import shop.mtcoding.pickme.dto.company.CompanyReq.CompanyJoinReqDto;
 import shop.mtcoding.pickme.dto.company.CompanyReq.CompanyLoginReqDto;
@@ -30,20 +30,14 @@ import shop.mtcoding.pickme.model.CompanyRepository;
 import shop.mtcoding.pickme.model.NoticeRepository;
 import shop.mtcoding.pickme.service.CompanyService;
 
-@Controller
+@RequiredArgsConstructor
+@RestController
 public class CompanyController {
 
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
-    private HttpSession session;
-
-    @Autowired
-    private CompanyRepository companyRepository;
-
-    @Autowired
-    private NoticeRepository noticeRepository;
+    private final CompanyService companyService;
+    private final HttpSession session;
+    private final CompanyRepository companyRepository;
+    private final NoticeRepository noticeRepository;
 
     @PostMapping("/companyJoin")
     public String companyJoin(CompanyJoinReqDto companyJoinReqDto) {

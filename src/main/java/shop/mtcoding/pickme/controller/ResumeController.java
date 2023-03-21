@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.pickme.dto.ResponseDto;
 import shop.mtcoding.pickme.dto.resume.ResumeReq.ResumeSaveReqDto;
 import shop.mtcoding.pickme.dto.resume.ResumeReq.ResumeUpdateReqDto;
@@ -30,20 +30,14 @@ import shop.mtcoding.pickme.model.Userskill;
 import shop.mtcoding.pickme.model.UserskillRepository;
 import shop.mtcoding.pickme.service.ResumeService;
 
-@Controller
+@RequiredArgsConstructor
+@RestController
 public class ResumeController {
 
-    @Autowired
-    private ResumeService resumeService;
-
-    @Autowired
-    private ResumeRepository resumeRepository;
-
-    @Autowired
-    private UserskillRepository userskillRepository;
-
-    @Autowired
-    private HttpSession session;
+    private final ResumeService resumeService;
+    private final ResumeRepository resumeRepository;
+    private final UserskillRepository userskillRepository;
+    private final HttpSession session;
 
     @PostMapping("/saveResume")
     public @ResponseBody ResponseEntity<?> saveResume(@RequestBody ResumeSaveReqDto resumeSaveReqDto) {

@@ -4,16 +4,16 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.pickme.dto.ResponseDto;
 import shop.mtcoding.pickme.dto.apply.ApplyReq.ApplyResumeSelectReqDto;
 import shop.mtcoding.pickme.dto.apply.ApplyResp.ApplyListRespDto;
@@ -24,20 +24,14 @@ import shop.mtcoding.pickme.model.ResumeRepository;
 import shop.mtcoding.pickme.model.Userskill;
 import shop.mtcoding.pickme.model.UserskillRepository;
 
-@Controller
+@RequiredArgsConstructor
+@RestController
 public class ApplyController {
 
-    @Autowired
-    private ApplyRepository applyRepository;
-
-    @Autowired
-    private ResumeRepository resumeRepository;
-
-    @Autowired
-    private HttpSession session;
-
-    @Autowired
-    private UserskillRepository userskillRespository;
+    private final ApplyRepository applyRepository;
+    private final ResumeRepository resumeRepository;
+    private final HttpSession session;
+    private final UserskillRepository userskillRespository;
 
     @GetMapping("/apply/applyUserList")
     public String applyUserList(Model model) {

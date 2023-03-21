@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.pickme.dto.ResponseDto;
 import shop.mtcoding.pickme.dto.notice.NoticeResp.NoticeMainRespDto;
 import shop.mtcoding.pickme.dto.resume.ResumeResp.ResumeSelectRespDto;
@@ -38,29 +38,17 @@ import shop.mtcoding.pickme.model.Userskill;
 import shop.mtcoding.pickme.model.UserskillRepository;
 import shop.mtcoding.pickme.service.UserService;
 
-@Controller
+@RequiredArgsConstructor
+@RestController
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private NoticeRepository noticeRepository;
-
-    @Autowired
-    private UserskillRepository userskillRepository;
-
-    @Autowired
-    private CompanyskillRepository companyskillRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private HttpSession session;
-
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final UserRepository userRepository;
+    private final NoticeRepository noticeRepository;
+    private final UserskillRepository userskillRepository;
+    private final CompanyskillRepository companyskillRepository;
+    private final UserService userService;
+    private final HttpSession session;
+    private final CompanyRepository companyRepository;
 
     @PutMapping("/user/{id}")
     public @ResponseBody ResponseEntity<?> MyPage(@PathVariable int id,

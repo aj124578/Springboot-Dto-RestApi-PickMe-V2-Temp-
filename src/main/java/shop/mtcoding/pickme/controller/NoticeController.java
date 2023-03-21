@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.pickme.dto.ResponseDto;
 import shop.mtcoding.pickme.dto.notice.NoticeReq.NoticeSaveReqDto;
 import shop.mtcoding.pickme.dto.notice.NoticeReq.NoticeUpdateReqDto;
@@ -30,20 +30,14 @@ import shop.mtcoding.pickme.model.Notice;
 import shop.mtcoding.pickme.model.NoticeRepository;
 import shop.mtcoding.pickme.service.NoticeService;
 
-@Controller
+@RequiredArgsConstructor
+@RestController
 public class NoticeController {
 
-    @Autowired
-    private HttpSession session;
-
-    @Autowired
-    private NoticeService noticeService;
-
-    @Autowired
-    private NoticeRepository noticeRepository;
-
-    @Autowired
-    private CompanyskillRepository companyskillRepository;
+    private final HttpSession session;
+    private final NoticeService noticeService;
+    private final NoticeRepository noticeRepository;
+    private final CompanyskillRepository companyskillRepository;
 
     @PostMapping("/saveNotice")
     public @ResponseBody ResponseEntity<?> saveNotice(@RequestBody NoticeSaveReqDto noticeSaveReqDto) {
